@@ -11,7 +11,7 @@ import { mime } from "mime-types";
 import { join } from "std/path/posix.ts";
 
 serve(async (req) => {
-    const type = req.headers.get("content-type") || ""
+    const type = req.headers.get("content-type") || "";
     const url = new URL(req.url);
     
     if (url.pathname === "/upload" && req.method === "POST" && type.startsWith("multipart/form-data")) {
@@ -33,9 +33,13 @@ serve(async (req) => {
         
         return json({ 
             success: true,
-            url: getUrl(name)
+            url: "\u200b" + getUrl(name)
         }, 201);
     }
+    
+    if (url.pathname === "/") return json({
+        success: true
+    })
     
     const file = await Deno.readFile(join("uploads", url.pathname));
     const mimeType = mime.getType(url.pathname);
