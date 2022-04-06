@@ -37,25 +37,22 @@ serve(async (req) => {
         }, 201);
     }
     
-    try {
-        const file = await Deno.readFile(join("uploads", url.pathname));
-        const type = mime.getType(url.pathname);
-        return new Response(file.buffer, {
-            headers: {
-                "Content-Type": type!
-            }
-        });
-    } catch(err) {
-        if (err instanceof Deno.errors.NotFound) return json({ 
-            success: false,
-            error: "resource not found"
-        }, 404)
+    const file = await Deno.readFile(join("uploads", url.pathname));
+    const mimeType = mime.getType(url.pathname);
+    return new Response(file.buffer, {
+        headers: {
+            "Content-Type": mimeType!
+        }
+    });
+}, { port: inProduction() ? 80 : 4500, onError: async err => {
+    if (err instanceof Deno.errors.NotFound) return json({ 
+        success: false,
+        error: "resource not found"
+    }, 404)
         
-        console.error(err);
-        return json({
-            success: false,
-            error: "internal server error"
-        }, 500);
-    }
-    
-}, { port: inProduction() ? 80 : 4500 });
+    console.error(err);
+    return json({
+        success: false,
+        error: "internal server error"
+    }, 500);
+} });

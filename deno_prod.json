@@ -1,0 +1,6 @@
+{
+    "importMap": "import_map.json",
+    "tasks": {
+        "start": "deno run --allow-net --allow-write=uploads --allow-read=uploads --allow-env --no-prompt mods/server/mod.ts"
+    }
+}
