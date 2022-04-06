@@ -1,6 +1,8 @@
 {
     "imports": {
         "std/": "https://deno.land/std@0.133.0/",
+        "mime-types": "https://deno.land/x/mimetypes@v1.0.0/mod.ts",
+        "randomstring": "https://deno.land/x/crypto_random_string@1.1.0/mod.ts",
         "@content-serve/utils": "./mods/utils/mod.ts"
     }
 }
