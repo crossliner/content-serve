@@ -5,7 +5,7 @@ under a monolithic repo
 ## PSA
 There are some stuff that got changed here is the list of those changes 
 ```
-- renamed fileUrl to url in the upload response
-- renamed environment var UPLOAD_KEY to API_KEY
-- renamed FILE_URL to URL
+- renamed fileUrl key to url in the upload response
+- renamed environment variable UPLOAD_KEY to API_KEY
+- renamed environment variable FILE_URL to URL
 ```
