@@ -1,25 +1,13 @@
 import { serve } from "std/http/server.ts";
-const production = Deno.env.get("DENO_ENV") === "production" ? true : false;
-const API_KEY = production ? Deno.env.get("API_KEY") : "test";
+import { inProduction, json, isVaildApiKey } from "@content-serve/utils";
 
-function json(data: any, status: number = 200) {
-    return new Response(
-        JSON.stringify(data),
-        {
-            status,
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }
-    )
-}
 
 serve(async (req) => {
     const type = req.headers.get("content-type") || ""
     const url = new URL(req.url);
     
     if (url.pathname === "/upload" && req.method === "POST" && type.startsWith("multipart/form-data")) {
-        if (req.headers.get("x-upload-key") !== API_KEY) return json({
+        if (isVaildApiKey(req.headers.get("x-upload-key"))) return json({
             success: false,
             error: "unauthorized to use the endpoint"
         }, 401);
@@ -31,7 +19,7 @@ serve(async (req) => {
             error: "invaild form configuration"
         }, 400);
         
-        const buf = await file.arrayBuffer();
+        // const buf = await file.arrayBuffer();
         
         return json({ 
             success: true
@@ -42,4 +30,4 @@ serve(async (req) => {
         success: false,
         error: "resource not found"
     }, 404)
-}, { port: 4533 }) // TODO: fetch the port to use from somewhere or make it 80 for production images
+}, { port: inProduction() ? 80 : 4500 });
