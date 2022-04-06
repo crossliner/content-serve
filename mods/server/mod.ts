@@ -46,10 +46,16 @@ serve(async (req) => {
             }
         });
     } catch(err) {
-        return json({ 
+        if (err instanceof Deno.errors.NotFound) return json({ 
             success: false,
             error: "resource not found"
         }, 404)
+        
+        console.error(err);
+        return json({
+            success: false,
+            error: "internal server error"
+        }, 500);
     }
     
 }, { port: inProduction() ? 80 : 4500 });
